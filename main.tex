@@ -1,0 +1,61 @@
+\documentclass[
+  12pt,
+  a4paper,
+  parskip,
+  openany
+]{scrbook}
+
+\usepackage[utf8]{inputenc}
+\usepackage[english]{babel}
+
+\usepackage[hidelinks]{hyperref}
+\usepackage{enumitem}
+\usepackage{suffix}
+\usepackage{lipsum}
+\usepackage{tabularx}
+
+% Citation packages and options
+\usepackage{csquotes}
+\usepackage[
+  backend=biber,
+  style=apa
+]{biblatex}
+\addbibresource{bibliography.bib}
+
+% ===== INDIVIDUAL AUTHORS PER CHAPTER =====
+% Source: https://tex.stackexchange.com/a/156865
+\newcommand\chapterauthor[1]{\authortoc{#1}\printchapterauthor{#1}}
+\WithSuffix\newcommand\chapterauthor*[1]{\printchapterauthor{#1}}
+
+\makeatletter
+\newcommand{\printchapterauthor}[1]{%
+  {\parindent0pt\vspace*{-25pt}%
+  \linespread{1.1}\large#1%
+  \par\nobreak\vspace*{35pt}}
+  \@afterheading%
+}
+\newcommand{\authortoc}[1]{%
+  \addtocontents{toc}{\vskip-10pt}%
+  \addtocontents{toc}{%
+    \protect\contentsline{chapter}%
+    {\hskip1.3em\mdseries\protect\scriptsize#1}{}{}}
+  \addtocontents{toc}{\vskip5pt}%
+}
+\makeatother
+% ==========================================
+
+
+\title{NoSQL Databases}
+\author{Daniel Rutz and Leon Schürmann (Eds.)}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+\tableofcontents
+
+\input{content/00_test}
+
+\printbibliography
+
+\end{document}
