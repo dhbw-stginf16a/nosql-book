@@ -15,6 +15,11 @@ let
       enumitem
       bigfoot
       slantsc
+      xpatch
+      minted
+      fvextra
+      ifplatform
+      framed
 
       # Bibliography
       biber
@@ -59,6 +64,8 @@ in
 
     buildInputs = [
       latexPackage pplatex
+      python3Packages.pygments
+      which
     ];
 
     configurePhase = ''
@@ -68,7 +75,7 @@ in
     '';
 
     buildPhase = ''
-      latexmk -pdflatex="pplatex -c pdflatex --" -pdf -interaction=nonstopmode "${mainFile}" 2>&1 | tee latexmk_log.txt
+      latexmk -pdflatex="pplatex -c pdflatex --" --shell-escape -pdf -interaction=nonstopmode "${mainFile}" 2>&1 | tee latexmk_log.txt
     '';
 
     installPhase = ''
