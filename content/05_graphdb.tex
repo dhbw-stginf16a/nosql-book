@@ -23,13 +23,13 @@ Another meaningful topic today are recommender systems, where most work focuses 
 
 These application fields bring very distinct workloads that require specific query languages to process. There are two different kinds of workload: in social network transactions low-latency online graphs are processed while for example link analysis algorithms evaluate high-throughput offline graphs \autocite{Angles2018AnIT}. Many query language proposals have come up recently, differing mainly in the underlying graph data structure/model and the functionality provided \autocite{Wood2012QueryLF}.
 
-A deeper description of the theory behind graph databases will be given in subsection \ref{section2}, aiming to connect the data model to its fields of application as well as comparing it to RDBMS. This comparison will be picked up in subsection \ref{section3}, where an implementation example will be given, focusing in particular on Neo4j and also explaining how an SQL example would be transformed to fit Graph Databases. Lastly, our findings will be stated in subsection \ref{section4} with a general conclusion. \\
+A deeper description of the theory behind graph databases will be given in subsection \ref{graphdb:section2}, aiming to connect the data model to its fields of application as well as comparing it to RDBMS. This comparison will be picked up in subsection \ref{graphdb:section3}, where an implementation example will be given, focusing in particular on Neo4j and also explaining how an SQL example would be transformed to fit Graph Databases. Lastly, our findings will be stated in subsection \ref{graphdb:section4} with a general conclusion. \\
 Since the topic of Graph Databases contains extensive theory, this chapter of the book will explain the theory and Neo4j in equal parts, to give an easy-to-understand introduction into the topic.
 
 
 
 
-\section{Graph Database Theory} \label{section2}
+\section{Graph Database Theory} \label{graphdb:section2}
 A graph database is a unique type of database designed to store data without transforming it into predefined structural models, whereby accessing and storing of relationships between data is as important as accessing and storing the data itself \autocite{neo4j:graphdb}. Graph databases offer Create, Read, Update and Delete (CRUD) methods as an online, operational database management system. They focus on operation availability, transactional performance and integrity. Thus, graph databases are usually incorporated into Online Transaction Processing (OLTP) systems \autocite{graphdb2015}.
 
 A graph database can be implemented with different concepts, non-native or native, for storage and request processing. Additionally, a data model must be chosen. The most common graph models are property graphs, hypergraphs and triples \autocite{graphdb2015}. For this eBook, the (labeled) property graph model will be examined because it is the most popular model in industry practice \autocite{graphdb2015} and the theoretical foundation of Neo4j \autocite{maheshlal2015}.
@@ -84,7 +84,7 @@ Non-native graph storage transforms the data from the graph model (e.g. property
 The key aspect of native graph storage is that it does not rely on actual indexes. The relationships between nodes within the graph are “natural adjacency”\autocite{graphdb2015}  indices. Thus, the nodes are stored in such a way that they are physically linked to each other on the disk. This is called “index-free adjacency”\autocite{graphdb2015}, which is in practice done by pointers. Accordingly, searching for a specific information in a native graph storage is implemented by traversing through pointers. This causes queries on native storage to be highly efficient compared to non-native storage which uses join-statements and index lookups \autocite{graphdb2015} .
 
 \subsection{Advantages of Graph Databases}
-Graph databases offer substantial advantages when working with connected data \autocite{maheshlal2015}. Its performance, flexibility and agility are the key differences to other databases \autocite{graphdb2015}. The following section will take a closer look at these three advantages. More details and references to actual research data on these advantages can be found in the section Comparison: Graph Databases and Relational Databases (\ref{section:comparison}).
+Graph databases offer substantial advantages when working with connected data \autocite{maheshlal2015}. Its performance, flexibility and agility are the key differences to other databases \autocite{graphdb2015}. The following section will take a closer look at these three advantages. More details and references to actual research data on these advantages can be found in the section Comparison: Graph Databases and Relational Databases (\ref{graphdb:comparison}).
 
 \subsubsection{Performance}
 A graph database has much higher query processing performance compared to relational and other NoSQL databases. This advantage becomes more and more prevalent as the size/amount of stored data grows. In the relational world more data would mean a higher join-intensity and thus worse performance. Whereas in the graph database world the performance remains to be almost constant even for an exponential increase of size. This is the cases because queries are being restricted to parts of the graph (e.g. a subgraph) which contains the information of interest.  Therefore, querying only needs time proportional to size of the subgraph and not to the size of the whole graph \autocite{maheshlal2015, graphdb2015}.
@@ -92,7 +92,7 @@ A graph database has much higher query processing performance compared to relati
 \subsubsection{Flexibility}
 The flexibility of a graph databases must be understood in the context of the graph database model. The model is flexible and so are graph databases. Furthermore, this flexibility is most apparent for an actual operational graph database in production environments.
 
-The paradigm of fitting data to predefined data models, as in SQL, is neither efficient nor desired by developers. Instead fitting an easily extensible and changeable data model to newly emerging data is more appropriate for fields of graph database applications (See more in the section "Fields of Application”, \ref{section:FoA}). Thereby the process of designing a complex and mostly final data model at the start of the database implementation, a point in time where it is impossible to predict all kinds of data that might be needed in the future, gets replaced by designing a basic data model with the expectation to change it in the future \autocite{maheshlal2015, graphdb2015}.
+The paradigm of fitting data to predefined data models, as in SQL, is neither efficient nor desired by developers. Instead fitting an easily extensible and changeable data model to newly emerging data is more appropriate for fields of graph database applications (See more in the section "Fields of Application”, \ref{graphdb:FoA}). Thereby the process of designing a complex and mostly final data model at the start of the database implementation, a point in time where it is impossible to predict all kinds of data that might be needed in the future, gets replaced by designing a basic data model with the expectation to change it in the future \autocite{maheshlal2015, graphdb2015}.
 
 This process is natively supported by graph databases. All components of a graph model (e.g. for the property graph model: nodes, properties, labels and relationships) can be added to an existing model without invalidating queries already in use. This concept of graph databases also minimizes maintenance cost and risk because the need for migrations (e.g. the equivalent of schema migrations for a relational database) is reduced \autocite{maheshlal2015, graphdb2015}.
 
@@ -101,7 +101,7 @@ In today's agile software development world, where developers need to focus on a
 
 A graph database is “schema-less” \autocite{maheshlal2015}. It does not transform data (e.g. normalization in the SQL world) but rather tries to represent the data as close to its actual format as possible. Furthermore, the application programming interface (API) and query language design of graph database increase testability \autocite{graphdb2015} . Finally, the flexibility of its data model enables the database to evolve with new data. As a result, a graph database has the characteristics to be agile software.
 
-\subsection{Fields of Application} \label{section:FoA}
+\subsection{Fields of Application} \label{graphdb:FoA}
 When reading through use cases described by marketing teams of graph database management systems (for example: Neo4j \autocite{neo4j:why_graphdb, neo4j:use_cases}
 ), it may feel like any problem could be solved with a graph database. Solving any problem with a graph database may be possible but this fact alone is not a valid reason to do so.
 
@@ -146,7 +146,7 @@ A graph database is not only able to model the network in its native representat
 The process of deciding which identity can access which resource is called identity and access management (IAM). This decision process also needs to utilize information about identities (e.g.  administrators, users), resources (e.g.  files, devices) and rules (e.g. “user X can access file Y”) that must be stored somewhere. Conventional storage options, like directory services or application specific solutions, tend to be unsuitable because they cannot manage the required complex interconnection structures of big organizations or are too slow for bigger datasets \autocite{neo4j:use_cases}.  Whereas a graph database is a valid solution because its agility allows the developer to easily model the complex structures and its performance does not slow down for bigger datasets.
 
 
-\subsection{Comparison: Graph Databases and Relational Databases} \label{section:comparison}
+\subsection{Comparison: Graph Databases and Relational Databases} \label{graphdb:comparison}
 The comparison between Graph Databases and Relational Databases is a known field, a lot of literature exists on this topic already. Throughout the comparisons, the two methods are always assessed under the same aspects: performance, flexibility, security and maturity. \\
 For those comparison points it makes sense to focus on specific implementations of the technologies, hence in this section Neo4j will be chosen as a concrete precedent for Graph Databases, whereas MySQL will be the example implementation for Relational Databases. \\
 It is important to note that literature comparing the two is already rather old and there are no comparisons done on newer versions. There is no new version of mySQL, but two new releases for Neo4j. Those have included a new query engine and performance optimizations. It is hence expected that if such a comparison were to be done again today, the performance results of Neo4j would improve.
@@ -173,7 +173,7 @@ For the comparison under the aspect of maturity it makes sense to talk about dat
 Since all Relational databases - including MySQL - use the same query language SQL, support is equal over all implementations and support for one implementation is applicable to all others \autocite{GarimaAnalysis}.
 Neo4js version 1.1 was released in February 2010. While Neo4j is a for-profit framework and has decent support from its parent company, this does not apply to all graph database implementations \autocite{Vicknair2010}. Furthermore, the query languages differ from implementation to implementation, separating them in that aspect and making support for one implementation not applicable to another one.
 
-\section{Implementing a Graph Database Model} \label{section3}
+\section{Implementing a Graph Database Model} \label{graphdb:section3}
 This section shall outline the general approach, how to convert an existing relational database model into a property graph model.
 In the second part an introduction to Neo4j, the implementation of a database model in Python and basic querying in an application and with Neo4js own query language \glqq Cypher\grqq{} will follow.
 
@@ -379,7 +379,7 @@ There are two major downsides to Neo4j. The first one is the memory footprint.
 A newly set up instance already consumes more than 600MB of RAM -- in comparison, a PostgreSQL instance storing a couple hundred MB of data still consumes less than half of that.
 The second downside is, that many features -- especially regarding maintenance and clustering -- are preserved for the enterprise edition and not available in the open source community edition. This makes it difficult if not impossible to use the community edition in a production environment.
 
-\section{Reflection} \label{section4}
+\section{Reflection} \label{graphdb:section4}
 \subsection{Alternative Graph Databases}
 \subsubsection{OrientDB}
 OrientDB is one of the biggest competitors to Neo4j, developed by Callidus Software Inc. (owned by SAP) and published under Apache-2 License \autocite{orientdb:vs_neo4j}.
