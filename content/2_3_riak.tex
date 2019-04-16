@@ -1,0 +1,58 @@
+\section{The Riak Key-Value Store}
+\chapterauthor{Daniel Rutz, Paul Thore Flachbart}
+
+\subsection{Introduction}
+The Riak KV authors describe Riak KV as \enquote{a distributed \gls{nosql} database designed to deliver maximum data availability by distributing data across multiple servers. As long as your Riak KV client can reach one Riak server, it should be able to write data.} \parencite{RiakKV} Actually, this sentence already describes most of Riak's characteristics:
+\begin{itemize}
+	\item Riak has been developed with availability in mind. It constructs a distributed system of nodes without master node. Even though this system can't guarantee consistency, it makes sure that the database is available as long as one node is accessible.
+	\item Riak is a \gls{nosql} database. Instead of using the \gls{sql} language, Riak provides an \gls{http} \parencite{RiakKVHTTP} and a Protocol Buffers \parencite{RiakKVProtoBuf} interface for \gls{crud} operations on key-value pairs.
+\end{itemize}
+
+There are two different databases besides Riak KV:
+\begin{itemize}
+	\item Riak TS has been developed for time series data. It is not scheme-free: You have to describe tables in a way similar to \gls{sql} \parencite{RiakTS}.
+	\item Riak CS is a cloud storage solution. It has been developed to be compatible to the Amazon S3 \gls{api} \parencite{RiakCS}.
+\end{itemize}
+
+This chapter will deal with advantages and disadvantages of Riak KV. Furthermore, we will compare Riak KV to Redis and categorise it according to the CAP theorem. The other Riak\footnote{From now on, Riak KV will be referred to as Riak.} variants are not in the scope of this text.
+
+\subsection{Characteristics of Riak}
+Riak is a key-value store written in Erlang. According to \textcite{Kuznetsov2014}, it is inspired by the Amazon Dynamo whitepaper \parencite{DeCandia2007}. Its main focus is distributivity: By using concepts such as consistent hashing and synchronisation using vector clocks, it does not need a master node to distribute data across multiple nodes.
+
+Riak can be used in a {\itshape eventually consistent} or in a {\itshape strongly consistent} mode: When used with eventual consistency, an accessible Riak node will always answer to a request, but it cannot guarantee the response to be up-to-date. With strong consistency, Riak internally tries to solve the Byzantine Generals problem by achieving a distributed consensus between the nodes about the current value. If less than half the replications of a value are not available, however, Riak will not be able to return a response as the required quorum will not be reached. It should be noted that strong consistency is flagged as experimental; the Riak authors discourage its usage in production environments. \parencite{RiakStrongConsistency}
+
+Riak splits its keyspace into so-called {\itshape buckets}. A key can be used multiple times as long as all the usages are in different keys. Access to a value must be done with bucket and key.
+
+A really interesting feature of Riak is the possibility to use MapReduce for queries of data: By sending a special query to the cluster, it can distribute the collection of requested data to all nodes. Every node now only needs to process only a subset of all key-value pairs. This allows distribution of computing power over multiple nodes \parencite{RiakUsingMapReduce}.
+
+\subsection{Placement inside CAP Theorem}
+The CAP Theorem as stated by \textcite{Brewer1999} says that a database system is not able to be consistent, available and partition tolerant at the same time. Riak has been designed with this principle in mind. In its standard configuration, Riak tries to be available under every circumstances, even when parts of the cluster are not available. This leads to eventual consistency because a node might not know about changes inside a key-value pair yet. This makes Riak an \textbf{AP} database. If Riak is configured for strong consistency, it gets unavailable if the node can not reach a distributed consensus about a value. However, Riak can guarantee the answer to be the lastest. That means that Riak in strong consistency mode is a \textbf{CP} database.
+
+\subsection{Advantages and Disadvantages}
+Riak has several advantages and disadvantages:
+\begin{itemize}
+	\item Its main advantage is the high level of availablility. Every node of a Riak cluster is able to answer queries, and even in the case of other node being unavailable, a Riak node will still try to answer. Writing data to a Riak node is always possible as long as the node is available.
+	\item Riak has been developed for high scalability. Because Riak does has a masterless structure where data automatically get redistributed when node are added or removed, it is able to handle bigger amounts of data without problems. In order to support this, adding and removing nodes in a cluster has been designed to be very easy.
+	\item Its main disadvantage is the very low consistency guarantee. In some cases, it might be better to get no result at all instead of getting wrong or old data. When using Riak, this problem must always be addressed.
+	\item The original development company of Riak is out of business. That means that there is no official commercial support for Riak. Instead, it is developed by the community. Especially in large production environments, this uncertainty about further support can lead to problems.
+	\item The Riak developers state that Riak is not suitable for small deployments because they do not need distributivity. For smaller databases, several alternatives are available.
+\end{itemize}
+
+\subsection{Comparison to Redis}
+As Redis and Riak both are key-value stores, a comparison is very interesting in order to show their main differences:
+\begin{itemize}
+	\item While Riak uses \gls{http} or Protocol Buffers for access, Redis has a custom query language \parencite{redis:protocol}.
+	\item Riak and Redis have different main focuses: While Riak is optimised for high availability, Redis is optimised for speed \parencite{redis:introduction}.
+	\item Riak is a persistent database. Redis offers persistency, too, but has been optimised for usage as an in-memory database.
+	\item Riak offers masterless replication. Redis however uses a client-server model for replication of data \parencite{redis:clusterSpecification}.
+\end{itemize}
+
+These points show that Redis is tailored for in-memory caching in special, while Riak has been developed for actual persistent business data. 
+
+\subsection{Test Implementation}
+In order to demonstrate the usage of a Riak database instance, a test application for NodeJS has been written. There is a NodeJS client for Riak that can be used \parencite{RiakNodeJsClient}. It offers a special function \texttt{fetchValue}, which takes the bucket that holds the data, and the specific key the user wants to access. It will then do the query and call a callback afterwards. In our case, we store user data inside the Riak database. The username is used as the key. With the key, we get a user object from Riak that contains the password. We compare to the password given by the user. If it does not match, an error is shown. Otherwise, we display the user's name as saved in the database. This access together with error handling took 10 lines, showing that it is easy to retrieve data from Riak.
+
+\subsection{Conclusion}
+We have introduced Riak, a distributed key-value store optimised for availability. We have shown different advantages and disadvantages of the database. Afterwards, we stated its main differences to Redis as an example for another key-value store. In the end, we have shown a test implementation for an application using Riak.
+
+Our research shows that Riak is ideal for big deployments with large databases where availability is really important. It should be noted, however, that Riak does not offer high consistency, which might be a problem in several use cases.
