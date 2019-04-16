@@ -19,6 +19,13 @@
 \usepackage[title,titletoc,header,toc,page]{appendix}
 \renewcommand{\appendixname}{Appendix}
 
+% Abbreviations
+\usepackage{glossaries-extra}
+\setabbreviationstyle{long-short}
+\setabbreviationstyle[acronym]{long-short}
+\makeglossaries
+\input{glossary-entries.tex}
+
 % Listings and drawings (needs to be loaded before csquotes)
 \usepackage{minted}
 \usepackage{tikz}
@@ -67,7 +74,10 @@
 \maketitle
 \tableofcontents
 
-\input{content/05_graphdb}
+\printglossaries
+
+\input{content/aa_test}
+\input{content/5_0_graph_db}
 
 
 \printbibliography
