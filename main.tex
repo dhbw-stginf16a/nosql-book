@@ -19,6 +19,10 @@
 \usepackage[title,titletoc,header,toc,page]{appendix}
 \renewcommand{\appendixname}{Appendix}
 
+% Layout refinements
+% Also fixes overfull hbox due to texttt
+\usepackage{microtype}
+
 % Abbreviations
 \usepackage{glossaries-extra}
 \setabbreviationstyle{long-short}
@@ -77,6 +81,8 @@
 \printglossaries
 
 \input{content/aa_test}
+
+\input{content/2_2_redis}
 \input{content/5_0_graph_db}
 
 
