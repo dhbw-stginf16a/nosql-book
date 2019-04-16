@@ -1,0 +1,100 @@
+%!TEX root = ../main.tex
+
+\chapter{Cassandra query example}\label{appendix:cassandra:queryExample}
+\begin{verbatim}
+Create database, table, insert and select data
+
+CREATE KEYSPACE people
+    WITH REPLICATION =
+      { 'class' : 'SimpleStrategy', 'replication_factor' : 3 };
+USE people;
+
+CREATE COLUMNFAMILY users (
+    username varchar PRIMARY KEY,
+    name varchar,
+    lastname varchar,
+    email varchar,
+    age int
+);
+
+INSERT INTO users (username, name, lastname, email)
+    VALUES ('john', 'John', 'Smith', 'john@gmail.com');
+INSERT INTO users (username, name, lastname, age)
+    VALUES ('jack', 'Jack', 'Sparrow', 33);
+INSERT INTO users (username, name, lastname, email, age)
+    VALUES ('kate', 'Kate', 'Austen', null, 25);
+
+SELECT * FROM users;
+
+ username | age  | email          | lastname | name
+----------+------+----------------+----------+------
+     kate |   25 |           null |   Austen | Kate
+     john | null | john@gmail.com |    Smith | John
+     jack |   33 |           null |  Sparrow | Jack
+
+$ nodetool flush
+
+$ sstabletump /var/lib/cassandra/data/people/*/mc-1-big-Data.db
+[
+  {
+    "partition" : {
+      "key" : [ "kate" ],
+      "position" : 0
+    },
+    "rows" : [
+      {
+        "type" : "row",
+        "position" : 45,
+        "liveness_info" : { "tstamp" : "2019-04-14T16:21:05.014317Z" },
+        "cells" : [
+          { "name" : "age", "value" : 25 },
+          {
+            "name" : "email",
+            "deletion_info" :
+              { "local_delete_time" : "2019-04-14T16:21:05Z" }
+          },
+          { "name" : "lastname", "value" : "Austen" },
+          { "name" : "name", "value" : "Kate" }
+        ]
+      }
+    ]
+  },
+  {
+    "partition" : {
+      "key" : [ "john" ],
+      "position" : 46
+    },
+    "rows" : [
+      {
+        "type" : "row",
+        "position" : 98,
+        "liveness_info" : { "tstamp" : "2019-04-14T16:21:04.982207Z" },
+        "cells" : [
+          { "name" : "email", "value" : "john@gmail.com" },
+          { "name" : "lastname", "value" : "Smith" },
+          { "name" : "name", "value" : "John" }
+        ]
+      }
+    ]
+  },
+  {
+    "partition" : {
+      "key" : [ "jack" ],
+      "position" : 99
+    },
+    "rows" : [
+      {
+        "type" : "row",
+        "position" : 144,
+        "liveness_info" : { "tstamp" : "2019-04-14T16:21:05.002672Z" },
+        "cells" : [
+          { "name" : "age", "value" : 33 },
+          { "name" : "lastname", "value" : "Sparrow" },
+          { "name" : "name", "value" : "Jack" }
+        ]
+      }
+    ]
+  }
+]
+```
+\end{verbatim}

@@ -16,6 +16,8 @@
 \usepackage{lipsum}
 \usepackage{tabularx}
 \usepackage{graphicx}
+\usepackage[title,titletoc,header,toc,page]{appendix}
+\renewcommand{\appendixname}{Appendix}
 
 % Abbreviations
 \usepackage{glossaries-extra}
@@ -79,5 +81,9 @@
 
 
 \printbibliography
+
+\appendix
+\input{appendix/3_1_cassandra}
+
 
 \end{document}
