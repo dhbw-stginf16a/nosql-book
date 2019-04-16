@@ -16,6 +16,8 @@
 \usepackage{lipsum}
 \usepackage{tabularx}
 \usepackage{graphicx}
+\usepackage[title,titletoc,header,toc,page]{appendix}
+\renewcommand{\appendixname}{Appendix}
 
 % Listings and drawings (needs to be loaded before csquotes)
 \usepackage{minted}
@@ -69,5 +71,9 @@
 
 
 \printbibliography
+
+\appendix
+\input{appendix/cassandra}
+
 
 \end{document}

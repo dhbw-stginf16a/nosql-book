@@ -20,6 +20,7 @@ let
       fvextra
       ifplatform
       framed
+      appendix
 
       # Bibliography
       biber
