@@ -34,14 +34,16 @@
 \usepackage{minted}
 \usepackage{tikz}
 
+
 % Citation packages and options
 \usepackage{csquotes}
 \usepackage[
   backend=biber,
-  style=apa
+  style=apa,
 ]{biblatex}
 \addbibresource{bibliography.bib}
 \DeclareLanguageMapping{english}{english-apa}
+
 
 % Correct listing references
 \providecommand*{\listingautorefname}{Listing}
@@ -78,13 +80,17 @@
 \maketitle
 \tableofcontents
 
+
 \printglossaries
 
 \input{content/aa_test}
 
+\input{content/2_0_key_value.tex}
+\input{content/2_1_hazelcast.tex}
 \input{content/2_2_redis}
 \input{content/2_3_riak}
 \input{content/5_0_graph_db}
+
 
 
 \printbibliography

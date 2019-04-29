@@ -1,0 +1,20 @@
+\chapter{Key Value Introduction}
+\chapterauthor{Vanessa Jörns, Tobias Schiffmann and Victor Veal}
+Key-value databases or key-value stores are a classification of NoSQL databases. 
+The idea of key-value stores is to collect a key  for every data set. Each set that is stored in the database can be accessed by the key. Therefore the key needs to be distinct, whether in a namespace or in the whole system. The database system has no pattern for the values which is why it is not  necessary to know about the type of the values that are stored. This feature enables easy storage of any kind of data like serialized structures, XML, text data, files...  \parencite{keyValueIntro}.
+
+
+However, there are also disadvantages of this database management type. In terms of operational actions like querying through the data, as one would do in relational database management systems, key-value databases only provide simple operations like get, put and delete. As a result of this constraint, data querying must be handled at the application level. 
+
+Another difference to relational databases are the use cases. 
+ For simple applications, which only require a system that is able to store and manage data (e.g. update entries, join tables), is capable of representing real-world entities and describes relationships, relational databases should be used. Key-value databases should rather be chosen if the application or the system requires a good performance since key-value solutions are faster than relational database systems \parencite{keyValueUsecase}.
+ 
+For instance, an online application that is only responsible to enable quick access to a profile, does not need to interact with entries of the profile itself. It should rather guarantee that the user of the application can easily find the profile by providing the corresponding key. To enable a quick access of the profile, it would be enough to only search for the unique ID of the profile instead of querying across several attributes of the data set.
+
+Nevertheless, not all key-value solutions are similar designed. There are a lot of different systems today. In the following chapters some database management systems will be introduced. The focus will be on providing the reader a quick overview about the different systems, how they distinguish from each other and how to use them.
+
+The first system that will be explained is Hazelcast which gives an overview of the the basic characteristics including a cheat sheet with needed commands. The next section talks about Redis and the basic features as well as in-memory computing. Last but not least the Key Value chapter is finished with a section about Riak. 
+
+
+% eventuell Bild
+% [1] https://en.wikipedia.org/wiki/Key-value_database#/media/File:KeyValue.PNG
