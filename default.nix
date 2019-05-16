@@ -63,13 +63,11 @@ let
     };
 
   mainFile = "main.tex";
-  pName = "stgtinf16a-nosql-book";
-  pVersion = "0.0.1";
 
 in
   stdenv.mkDerivation rec {
-    name = "${pName}-${version}";
-    version = pVersion;
+    pname = "stgtinf16a-nosql-book";
+    version = "0.0.1";
 
     src = ./.;
 
@@ -79,7 +77,7 @@ in
       which
     ];
 
-    configurePhase = ''
+    preBuild = ''
       # We could be building from an unclean directory, so remove intermediate files first
       latexmk -C
       rm -f "$(basename ${mainFile} .tex).bbl" "$(basename ${mainFile} .tex).run.xml"
@@ -90,8 +88,7 @@ in
     '';
 
     installPhase = ''
-      mkdir $out
-      mv "./$(basename ${mainFile} .tex).pdf" $out/
+      mv "./$(basename ${mainFile} .tex).pdf" $out
     '';
 
     doCheck = true;
