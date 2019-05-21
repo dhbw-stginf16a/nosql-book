@@ -260,3 +260,6 @@ TSWLatexianTemp*
 
 # Nix output
 /result
+
+# Error log
+latexmk_log.txt
