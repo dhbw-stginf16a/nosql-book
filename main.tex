@@ -16,6 +16,7 @@
 \usepackage{lipsum}
 \usepackage{tabularx}
 \usepackage{graphicx}
+\usepackage{float}
 \usepackage[title,titletoc,header,toc,page]{appendix}
 \renewcommand{\appendixname}{Appendix}
 
@@ -32,6 +33,7 @@
 
 % Listings and drawings (needs to be loaded before csquotes)
 \usepackage{minted}
+\usemintedstyle[js]{vs}
 \usepackage{tikz}
 \usetikzlibrary{intersections,arrows.meta}
 
@@ -90,12 +92,14 @@
 
 \input{content/1_introduction.tex}
 
-\input{content/2_0_key_value.tex}
-\input{content/2_1_hazelcast.tex}
+\input{content/2_0_key_value}
+\input{content/2_1_hazelcast}
 \input{content/2_2_redis}
 \input{content/2_3_riak}
 \input{content/3_0_cassandra}
-\input{content/4_2_rethink_db.tex}
+\input{content/4_0_document_oriented}
+\input{content/4_1_couchbase}
+\input{content/4_2_rethink_db}
 \input{content/5_0_graph_db}
 
 
