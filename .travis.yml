@@ -2,7 +2,7 @@ language: nix
 
 before_deploy:
   - mkdir pages
-  - cp -rf result/* pages/
+  - cp -f ./result pages/main.pdf
 
 deploy:
   local-dir: pages

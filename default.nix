@@ -1,4 +1,8 @@
-with import <nixpkgs> {};
+with import (fetchTarball {
+  url = "https://github.com/nixos/nixpkgs-channels/archive/5d3fd36.tar.gz";
+  sha256 = "1yjn56jsczih4chjcll63a20v3nwv1jhl2rf6rk8d8cwvb10g0mk";
+}) {};
+  
 
 let
   latexPackage = texlive.combine {
