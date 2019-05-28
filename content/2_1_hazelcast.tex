@@ -1,8 +1,7 @@
-
-\chapter{Hazelcast}
+\section{Hazelcast}
 \chapterauthor{Vanessa Jörns, Tobias Schiffmann and Victor Veal}
 
-\section{Hazelcast Introduction}
+\subsection{Introduction}
 
 Hazelcast is a company that is developing an in-memory computing platform consisting of Hazelcast IMDG, Hazelcast Jet and Hazelcast Cloud. “Hazelcast Jet is an embeddable, distributed computing platform for fast processing of big data sets”. It is built on the foundation of Hazelcast IMDG on which this chapter focuses \parencite{hazelcast}.
 
@@ -11,7 +10,7 @@ An in-memory data grid (IMDG) is a rather new concept where data is stored in th
 As Hazelcast is designed to be lightweight and easy to use, it can be downloaded as a compact library (JAR) and can be used by simply adding this JAR file to the classpath. With Java as the only dependency there is no need to install any software \parencite{hazelcastmanual}.
 
 Firstly, the features of Hazelcast are specified and distinguished from other key-value solutions. The next section talks about the CAP theorem and how it applies to Hazelcast. After that a short manual for implementing Hazelcast for own applications is provided. This inlcudes a basic set up as well as a configuration. For reference a cheat sheet with the most important commands is included. In the end, the whole chapter about Hazelcast is concluded and the advantages and disadvantages are analyzed. 
-\section{Specification}
+\subsection{Specification}
 Hazelcast consists of many same or similar features like other key value databases and IMDGs. However, there are some major features which describe Hazelcast’s distinctive strengths.
 The first and one of the main characteristics is that Hazelcast completely computes in-memory rather than storage based.  This makes Hazelcast extremely fast but also volatile.
 
@@ -29,15 +28,15 @@ This illustration shows the cluster structure as described above. It explains ho
 Moreover, Hazelcast supports various distributed collectors, features and processors. Besides storing the data in-memory distributed on many nodes, it is possible to load data from diverse sources into varying structures, communicate across the cluster by sending messages and to use the stored data for analytical processing \parencite{johns2015}.
 
 
-\section{Hazelcast and the CAP theorem}
+\subsection{Hazelcast and the CAP theorem}
 As Hazelcast enables data storage for distributed systems, it may be interesting how the CAP theorem applies to it. According to the chapters before, Hazelcast offers a storage mechanism that distributes data across several nodes. Therefore the first aspect out of the CAP theorem is network partitioning. According to the article \textit{Jepsen Analysis on Hazelcast 3.8.3} \parencite{hazelcastCP}, Hazelcast is a PA system which means that it favours availability over consistency. Due to the fact that data is partitioned, the problem of keeping the data consistent over the whole system occurs. For example, if the user inserts a new entry to a cluster, the whole systems needs to update this info so that the same information can be provided from all nodes. This problem of having several nodes storing inconsistent data is called split brain in an In-Memory Data Grid system.
 
 Hazelcast offers a method that should avoid split brain. In the so called "Split Brain Protection" a minimum number of nodes is set on which write or read operations are prevented. If a split brain happens, any sub-clusters that have a lower number of nodes than the minimum number are prevented from accepting write operations. Nevertheless, this method only reduces the time of inconsistency. Therefore it does not completely avoid the inconsistent state of the system \parencite{hazelcastCP}.
 
 Recently, the Hazelcast company has announced the ability to provide a solution that supports both PA (availability over consistency) and PC (constistency over availability). This feature should allow the user to adapt more flexibly to the requirements of the application. So far, there are too less resources that can describe this new feature of Hazelcast which is why this paper is currently not able to report about it \parencite{hazelcastCAP}.
 
-\section{Implementation}
-\subsection*{Getting Started}
+\subsection{Implementation}
+\subsubsection*{Getting Started}
 As already mentioned Hazelcast is designed to be easy to use and therefore only require a few steps to set it up running.
 First of all, the Hazelcast package has to be downloaded, for example from the official website \parencite{hazelcast:hazelcastDownload}. The package is offered in a compressed data format and has to be extracted afterwards.
 
@@ -61,9 +60,9 @@ When executing the scripts in another window, Hazelcast shows how the new member
 Now the data is spread across the members. They both own a particular partition of the data and store the other part as backup.
 
 When closing one terminal to test Hazelcast's reaction to a cluster node failure, the remaining member tries to reestablish the connection to the closed one, but without success. The terminal will than display the process of repartitioning the cluster and prints a statement when it finishes.
-\subsection*{Members and Clients}
+\subsubsection*{Members and Clients}
 Besides the console application Hazelcast also provides the opportunity to include the Hazelcast package in your code. For Java there is a package for members and one for clients provided. Other programming languages only have clients to work with. The difference between clients and members is that clients do not hold data. They connect to Hazelcast cluster members and access the data on that way for read and write operations \parencite{hazelcastmanual}. If Hazelcast has to be set up for an application in C++ for example, the scripts in the \texttt{demo/} directory can be used to start a cluster member without needing to create a java application. The C++ application than has to include the Hazelcast package and can access or create the data via the member.
-\subsection*{Configuration}
+\subsubsection*{Configuration}
 Hazelcast offers an XML file to adjust certain configurations in the \texttt{bin/} directory.
 It is possible to change the amount of backups and also the types of backups. There are normal backups which are synchronized and therefore lock the data in case it is manipulated. All other nodes have to wait until the data is changed in all backups and the changes are confirmed by the nodes which hold the backups. Additionally, there are asynchronous backups. They do not lock any data and therefore bring a performance increase because the nodes do not have to wait for them to confirm the changes. On the other hand, it brings the risk of inconsistent data. Nodes could access data which are no longer valid because the changes were not made on all backups after a manipulation took place.
 
@@ -79,8 +78,8 @@ Furthermore Hazelcast provides configurations about how big a particular data st
 In this example the map called \textit{"capitals"} has a maximum size of 10 items per node. When reaching this maximum, 20 percent of the data will be freed according to the principle of Least Frequently Used (LFU). One synchronous and one asynchronous backup will be created and the time to live for data sets is set. This means that data will be deleted after this amount of seconds goes by. In contrast to this, setting the maximum idle time will only delete a data set when it is not accessed after a certain amount of seconds.
 \citeauthor{johns2015} and the Hazelcast websites provide more information about configuration and go more in detail.
 
-\section{Cheat Sheet}
-\subsection*{General commands}
+\subsection{Cheat Sheet}
+\subsubsection*{General commands}
 \begin{tabular}{|p{0.3\textwidth}|p{0.7\textwidth}|}
     \hline
     \texttt{echo true|false} & turns on/off echo of commands (default false)\\\hline
@@ -93,7 +92,7 @@ In this example the map called \textit{"capitals"} has a maximum size of 10 item
     \texttt{ns} \texttt{<string>} & switch the namespace for using the distributed queue/map/set/list \texttt{<string>} \newline (default value = "\texttt{default}")\\\hline
     \texttt{@ <file>} & executes the given \texttt{file} script. Use '//' for comments in the script\\\hline
 \end{tabular}
-\subsection*{Queue commands}
+\subsubsection*{Queue commands}
 \begin{tabular}{|p{0.3\textwidth}|p{0.7\textwidth}|}
     \hline
     \texttt{q.offer <string>} & adds a string object to the queue\\\hline
@@ -104,7 +103,7 @@ In this example the map called \textit{"capitals"} has a maximum size of 10 item
     \texttt{q.size} & adds a string object to the queue\\\hline
     \texttt{q.clear} & clears the queue\\\hline
 \end{tabular}
-\subsection*{Set commands}
+\subsubsection*{Set commands}
 \begin{tabular}{|p{0.3\textwidth}|p{0.7\textwidth}|}
     \hline
     \texttt{s.add <string>} & adds a string object to the set\\\hline
@@ -115,7 +114,7 @@ In this example the map called \textit{"capitals"} has a maximum size of 10 item
     \texttt{s.size} & size of the set\\\hline
     \texttt{s.clear} & clears the set\\\hline
 \end{tabular}
-\subsection*{List commands}
+\subsubsection*{List commands}
 \begin{tabular}{|p{0.3\textwidth}|p{0.7\textwidth}|}
     \hline
     \texttt{l.add <string>} & adds string to the list\\\hline
@@ -128,7 +127,7 @@ In this example the map called \textit{"capitals"} has a maximum size of 10 item
     \texttt{l.size} & size of list\\\hline
     \texttt{l.clear} & clears list\\\hline
 \end{tabular}
-\subsection*{Map commands}
+\subsubsection*{Map commands}
 \begin{tabular}{|p{0.3\textwidth}|p{0.7\textwidth}|}
     \hline
     \texttt{m.put <key> <value>} & puts an entry to the map\\\hline
@@ -150,7 +149,7 @@ In this example the map called \textit{"capitals"} has a maximum size of 10 item
     \texttt{m.unlock <key>} & unlocks the key\\\hline
     \texttt{m.stats} & shows the local stats of the map\\\hline
 \end{tabular}
-\subsection*{MultiMap commands}
+\subsubsection*{MultiMap commands}
 \begin{tabular}{|p{0.3\textwidth}|p{0.7\textwidth}|}
     \hline
     \texttt{mm.put <key> <value>} & puts an entry to the multimap\\\hline
@@ -169,7 +168,7 @@ In this example the map called \textit{"capitals"} has a maximum size of 10 item
     \texttt{mm.stats} & shows the local stats of the map\\\hline    
 \end{tabular}
 
-\section{Conclusion}
+\subsection{Conclusion}
 
 Hazelcast is categorized as a key-value NoSQL solution, but since it is an in-memory data grid there are some main features that should be emphasized which set Hazelcast apart from the ordinary key-value databases.
 First of all, one of the key characteristics is its simplicity. As mentioned above, Hazelcast’s only dependency is Java and therefore it can be used by simply downloading the JAR file and including it in the classpath.
